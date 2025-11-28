@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Nutrition — Student Guide eBook</title>
+    <meta name="description" content="Science-based nutrition guide to boost student focus, energy, and academic success.">
+    <meta name="keywords" content="student nutrition, study energy, student meals, how to eat healthier, student wellness">
+    
+    <!-- Fonts: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind Config for specific colors/fonts -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#4CAF50', // Fresh Green
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        dark: '#111827',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .dark .glass-nav {
+            background: rgba(17, 24, 39, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #111827, #4CAF50);
+        }
+        .dark .text-gradient {
+            background-image: linear-gradient(to right, #f3f4f6, #4ade80);
+        }
+
+        /* Hide scrollbar for clean horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Accordion transition */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-600 antialiased bg-white dark:bg-dark dark:text-gray-300 transition-colors duration-300 selection:bg-brand-500 selection:text-white">
+
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 h-1 bg-brand-500 z-50 transition-all duration-150" id="scrollProgress" style="width: 0%"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full top-0 z-40 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <i data-lucide="leaf" class="h-6 w-6 text-brand-500"></i>
+                    <span class="font-heading font-semibold text-lg tracking-tight text-gray-900 dark:text-white">SMART<span class="text-brand-500">NUTRITION</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#ebook" class="text-sm font-medium hover:text-brand-600 transition-colors">The eBook</a>
+                    <a href="#chapters" class="text-sm font-medium hover:text-brand-600 transition-colors">Chapters</a>
+                    <a href="#tools" class="text-sm font-medium hover:text-brand-600 transition-colors">Tools</a>
+                    <a href="#about" class="text-sm font-medium hover:text-brand-600 transition-colors">Author</a>
+                    <a href="#contact" class="text-sm font-medium hover:text-brand-600 transition-colors">Contact</a>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-4">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle Dark Mode">
+                        <i data-lucide="moon" class="h-5 w-5 dark:hidden text-gray-600"></i>
+                        <i data-lucide="sun" class="h-5 w-5 hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <a href="#download" class="hidden md:inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-brand-600 hover:bg-brand-700 transition-all shadow-sm hover:shadow-md">
+                        Download Guide
+                    </a>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#ebook" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800">The eBook</a>
+                <a href="#chapters" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800">Chapters</a>
+                <a href="#tools" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800">Tools</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800">Author</a>
+                <a href="#download" class="block px-3 py-2 mt-4 text-center rounded-md text-base font-medium bg-brand-500 text-white">Download Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 dark:opacity-10"></div>
+            <div class="absolute top-0 right-0 -translate-y-12 translate-x-12 blur-3xl opacity-20">
+                <div class="aspect-square w-96 rounded-full bg-brand-400"></div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <!-- Text Content -->
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 mb-6">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-500 animate-pulse"></span>
+                        <span class="text-xs font-medium text-brand-700 dark:text-brand-300 tracking-wide uppercase">New Release 2024</span>
+                    </div>
+                    <h1 class="font-heading text-5xl sm:text-6xl font-semibold tracking-tight text-gray-900 dark:text-white mb-6 leading-[1.1]">
+                        Eat Smarter.<br>
+                        Study Better.<br>
+                        <span class="text-gradient">Live Healthier.</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-lg">
+                        Smart Nutrition: The Ultimate Guide for Students — a science-backed eBook designed to boost focus, energy, and academic performance without breaking the bank.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#download" class="inline-flex justify-center items-center px-8 py-3.5 border border-transparent text-sm font-medium rounded-xl text-white bg-brand-600 hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20">
+                            Download the eBook
+                        </a>
+                        <a href="#chapters" class="inline-flex justify-center items-center px-8 py-3.5 border border-gray-200 dark:border-gray-700 text-sm font-medium rounded-xl text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                            Preview Chapters
+                        </a>
+                    </div>
+                    <div class="mt-10 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs overflow-hidden"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt="Student"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs overflow-hidden"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&h=64" alt="Student"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs overflow-hidden"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=64&h=64" alt="Student"></div>
+                        </div>
+                        <p>Trusted by <span class="font-semibold text-gray-900 dark:text-white">500+ students</span></p>
+                    </div>
+                </div>
+
+                <!-- Hero Image Composition -->
+                <div class="relative lg:h-[600px] flex items-center justify-center">
+                    <div class="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Healthy balanced meal bowl" class="object-cover w-full h-full">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                            <div class="text-white">
+                                <p class="font-medium text-lg">Fuel Your Brain</p>
+                                <p class="text-sm opacity-80">Simple recipes for busy schedules.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Floating Card -->
+                    <div class="absolute -bottom-6 -left-6 sm:bottom-12 sm:left-0 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
+                        <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Energy Level</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">Optimized</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Insights Section -->
+    <section class="py-24 bg-gray-50 dark:bg-gray-800/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-200 dark:divide-gray-700">
+                <div class="px-4 py-4 text-center">
+                    <p class="text-5xl font-heading font-bold text-brand-500 mb-2">70%</p>
+                    <p class="text-sm text-gray-500 mb-2">of students report</p>
+                    <p class="font-medium text-gray-900 dark:text-white">Mid-day energy crashes</p>
+                </div>
+                <div class="px-4 py-4 text-center">
+                    <p class="text-5xl font-heading font-bold text-brand-500 mb-2">50+</p>
+                    <p class="text-sm text-gray-500 mb-2">Survey participants</p>
+                    <p class="font-medium text-gray-900 dark:text-white">Data-driven research</p>
+                </div>
+                <div class="px-4 py-4 text-center">
+                    <p class="text-5xl font-heading font-bold text-brand-500 mb-2">100%</p>
+                    <p class="text-sm text-gray-500 mb-2">Focus on affordability</p>
+                    <p class="font-medium text-gray-900 dark:text-white">Budget-friendly guide</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features / Why This Matters -->
+    <section class="py-24 bg-white dark:bg-dark" id="ebook">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="font-heading text-3xl font-semibold tracking-tight text-gray-900 dark:text-white mb-4">Why This Guide Matters</h2>
+                <p class="text-gray-600 dark:text-gray-400">Navigate the complex world of nutrition with a guide built specifically for the student lifestyle.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Boost Cognitive Function</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Learn which foods directly impact memory retention and focus during exam season.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="wallet" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Budget Like a Pro</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Healthy eating doesn't have to be expensive. Master the art of the student grocery haul.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Save Time</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Meal prep systems designed for dorm rooms and shared kitchens. Cook once, eat all week.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="battery-charging" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Sustainable Energy</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Stop relying on caffeine. Discover foods that provide slow-release energy throughout the day.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="smile" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Stress Reduction</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Understanding the gut-brain axis and how specific nutrients can lower cortisol levels.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 mb-4">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Actionable Habits</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">No vague advice. Get checklists, templates, and systems you can apply immediately.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Ebook & Chapters Section -->
+    <section class="py-24 bg-gray-50 dark:bg-gray-800/30" id="chapters">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                
+                <!-- Left: Mockup & Intro -->
+                <div class="sticky top-24">
+                    <div class="relative w-full aspect-[3/4] bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden mb-8 group">
+                        <!-- Mockup CSS -->
+                        <div class="absolute inset-0 bg-brand-500 flex flex-col items-center justify-center p-8 text-center">
+                            <i data-lucide="leaf" class="w-16 h-16 text-white mb-4 opacity-80"></i>
+                            <h2 class="font-heading text-4xl font-bold text-white mb-2 tracking-tight">SMART<br>NUTRITION</h2>
+                            <p class="text-brand-100 font-medium tracking-widest text-sm uppercase">The Student Guide</p>
+                            <div class="mt-12 w-full h-1 bg-white/20 rounded-full"></div>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent pointer-events-none"></div>
+                        <div class="absolute bottom-6 right-6 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-md text-white text-xs font-mono">
+                            PDF EDITION
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-heading font-semibold text-gray-900 dark:text-white mb-4">What's Inside?</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Over 80 pages of concentrated wisdom derived from nutrition science and real-world student surveys. This isn't a textbook; it's a survival manual for your academic career.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-500"></i> Full Meal Plans
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-500"></i> Nutrient Cheatsheets
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-500"></i> Printable Templates
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right: Accordion Chapters -->
+                <div class="space-y-4">
+                    <div class="mb-8">
+                        <h2 class="font-heading text-3xl font-semibold text-gray-900 dark:text-white">Table of Contents</h2>
+                        <p class="text-gray-500 mt-2">Click to explore detailed chapter summaries.</p>
+                    </div>
+
+                    <!-- Chapter 1 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">01</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Introduction & Survey Insights</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                We start by breaking down the current state of student health based on our survey of 50 students. Understand why you feel tired and how common dietary habits in college contribute to academic struggles.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 2 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">02</span>
+                                <span class="font-medium text-gray-900 dark:text-white">The Brain–Food Connection</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                A deep dive into neuroscience. Learn about Omega-3s, antioxidants, and complex carbs. We explain the science of glucose spikes and how to maintain a "flow state" for hours using snacks.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 3 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">03</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Student Pantry Guide</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                What should you actually buy? We provide a tiered shopping list: Essentials, Nice-to-haves, and Luxuries. Includes tips on buying in bulk and shelf-stable proteins.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 4 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">04</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Meal Prep System</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                The "Sunday Ritual." A step-by-step guide to prepping 5 days of lunches in under 90 minutes. Includes storage safety tips and container recommendations.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 5 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">05</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Dorm-Room Recipes</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                No stove? No problem. 15 recipes that require only a microwave or kettle. From overnight oats to mug omelets and loaded couscous salads.
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Chapter 6 -->
+                     <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">06</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Stress & Nutrition</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Exam stress eats away at your nutrients. Learn how to replenish magnesium and B-vitamins during finals week to keep anxiety manageable.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 7 -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-hidden">
+                        <button class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <span class="text-brand-500 font-mono text-sm">07</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Decoding Labels</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
+                        </button>
+                        <div class="accordion-content bg-gray-50/50 dark:bg-gray-900/20">
+                            <div class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Learn to spot hidden sugars and marketing gimmicks. We teach you how to read a nutrition label in 5 seconds flat to make smarter choices at the campus store.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools & Resources Section -->
+    <section class="py-24 bg-white dark:bg-dark" id="tools">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <h2 class="font-heading text-3xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">Tools & Resources</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Included free with your download.</p>
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tool 1 -->
+                <div class="group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="absolute right-6 top-6 text-gray-300 group-hover:text-brand-500 transition-colors">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </div>
+                    <div class="w-10 h-10 rounded-lg bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-gray-900 dark:text-white mb-4">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-900 dark:text-white">Weekly Meal Planner</h3>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">PDF template to organize breakfast, lunch, dinner, and snacks.</p>
+                </div>
+
+                <!-- Tool 2 -->
+                <div class="group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="absolute right-6 top-6 text-gray-300 group-hover:text-brand-500 transition-colors">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </div>
+                    <div class="w-10 h-10 rounded-lg bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-gray-900 dark:text-white mb-4">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-900 dark:text-white">Smart Grocery List</h3>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Categorized list for quick shopping trips. Includes price estimates.</p>
+                </div>
+
+                <!-- Tool 3 -->
+                <div class="group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="absolute right-6 top-6 text-gray-300 group-hover:text-brand-500 transition-colors">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </div>
+                    <div class="w-10 h-10 rounded-lg bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-gray-900 dark:text-white mb-4">
+                        <i data-lucide="pie-chart" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-900 dark:text-white">Budget Tracker</h3>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Excel sheet to track food spending vs. nutritional value.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 border-t border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 class="font-heading text-3xl font-semibold text-center tracking-tight text-gray-900 dark:text-white mb-16">Student Success Stories</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex gap-1 text-brand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">"I used to crash every day at 2 PM. The 'Energy Management' chapter completely changed how I snack during lectures. My grades actually improved."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                             <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100" alt="Sarah" class="object-cover">
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white">Sarah M.</p>
+                            <p class="text-xs text-gray-500">Biology Major</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex gap-1 text-brand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">"Living in a dorm with just a microwave was a nightmare until I found the Dorm Recipes section. The mug omelet is a lifesaver."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100" alt="James" class="object-cover">
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white">James K.</p>
+                            <p class="text-xs text-gray-500">Engineering Student</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex gap-1 text-brand-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">"Honestly, the budgeting tool alone is worth it. I saved about $50 last month just by following the pantry guide."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100" alt="Elena" class="object-cover">
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white">Elena R.</p>
+                            <p class="text-xs text-gray-500">Business Student</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Author -->
+    <section class="py-24 bg-brand-50/50 dark:bg-gray-800/30" id="about">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <div class="w-24 h-24 mx-auto bg-gray-300 rounded-full mb-6 border-4 border-white dark:border-gray-700 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&h=200" alt="Author" class="object-cover w-full h-full">
+            </div>
+            <h2 class="font-heading text-2xl font-semibold text-gray-900 dark:text-white mb-4">Meet the Author</h2>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                "I created this guide because I struggled with my own health during my freshman year. Between late-night study sessions and a tight budget, nutrition was the last thing on my mind—until my grades started slipping. I spent the last two years researching, surveying fellow students, and consulting with nutritionists to build a system that actually works for us. My mission is simple: to help you fuel your ambition."
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA & Contact -->
+    <section class="py-24 bg-white dark:bg-dark relative overflow-hidden" id="download">
+        <div class="max-w-3xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="font-heading text-4xl font-semibold tracking-tight text-gray-900 dark:text-white mb-6">Ready to upgrade your student life?</h2>
+            <p class="text-lg text-gray-500 dark:text-gray-400 mb-10">Get instant access to the eBook, all templates, and the grocery guide.</p>
+            
+            <button class="w-full sm:w-auto px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-lg shadow-lg hover:shadow-brand-500/25 transition-all transform hover:-translate-y-1 mb-12">
+                Download PDF Package — Free
+            </button>
+
+            <div class="border-t border-gray-100 dark:border-gray-800 pt-16" id="contact">
+                <h3 class="font-heading text-xl font-semibold text-gray-900 dark:text-white mb-6">Stay in the loop</h3>
+                <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+                    <input type="email" placeholder="student@university.edu" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                    <button type="button" class="px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-medium text-sm hover:opacity-90 transition-opacity">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-xs text-gray-400 mt-4">Get weekly student health tips. No spam, ever.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <i data-lucide="leaf" class="h-5 w-5 text-brand-500"></i>
+                <span class="font-heading font-semibold text-gray-900 dark:text-white">SMART<span class="text-brand-500">NUTRITION</span></span>
+            </div>
+            <div class="flex gap-6 text-sm text-gray-500">
+                <a href="#" class="hover:text-brand-500 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-brand-500 transition-colors">Terms</a>
+                <a href="#" class="hover:text-brand-500 transition-colors">Contact</a>
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            html.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Accordion Logic
+        const accordions = document.querySelectorAll('.accordion-header');
+
+        accordions.forEach(acc => {
+            acc.addEventListener('click', function() {
+                // Toggle active class on icon
+                const icon = this.querySelector('svg.lucide-chevron-down');
+                
+                // Toggle Content
+                const content = this.nextElementSibling;
+                const isExpanded = content.classList.contains('active');
+                
+                // Close all others (Linear style)
+                document.querySelectorAll('.accordion-content').forEach(c => {
+                    c.style.maxHeight = null;
+                    c.classList.remove('active');
+                });
+                document.querySelectorAll('.accordion-header svg').forEach(i => {
+                    i.style.transform = 'rotate(0deg)';
+                });
+
+                if (!isExpanded) {
+                    content.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // Scroll Progress Bar
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>
