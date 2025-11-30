@@ -17,6 +17,9 @@
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Tailwind Config for specific colors/fonts -->
     <script>
@@ -41,7 +44,20 @@
                             800: '#166534',
                             900: '#14532d',
                         },
+                        analytics: {
+                            primary: '#6C63FF',
+                            secondary: '#47C6FF',
+                        },
                         dark: '#111827',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
                     }
                 }
             }
@@ -89,6 +105,15 @@
         }
         .accordion-content.active {
             opacity: 1;
+        }
+
+        /* Dashboard Card Hover Glow */
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(108, 99, 255, 0.15);
         }
     </style>
 </head>
@@ -215,7 +240,7 @@
     </section>
 
     <!-- Data Insights Section -->
-    <section class="py-24 bg-gray-50 dark:bg-gray-800/50">
+    <section class="py-12 bg-gray-50 dark:bg-gray-800/50">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-200 dark:divide-gray-700">
                 <div class="px-4 py-4 text-center">
@@ -233,6 +258,175 @@
                     <p class="text-sm text-gray-500 mb-2">Focus on affordability</p>
                     <p class="font-medium text-gray-900 dark:text-white">Budget-friendly guide</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW GRAPH & ANALYTICS SECTION -->
+    <section class="py-24 bg-white dark:bg-dark relative overflow-hidden" id="analytics-dashboard">
+        <!-- Background decorative blob -->
+        <div class="absolute top-0 right-0 -mr-40 -mt-40 w-96 h-96 bg-analytics-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 opacity-0" id="analytics-header">
+                <div>
+                    <h2 class="font-heading text-3xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">Survey Analytics</h2>
+                    <p class="text-gray-500 dark:text-gray-400">Real insights from 50+ students on nutrition habits.</p>
+                </div>
+                
+                <!-- Custom Filter Toggle -->
+                <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-xl inline-flex">
+                    <button class="px-4 py-1.5 text-xs font-medium rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm transition-all">Overview</button>
+                    <button class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">Habits</button>
+                    <button class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">Concerns</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <!-- KPI Card 1: Nutrition Confidence -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-1 opacity-0" style="animation-delay: 100ms;">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-2.5 rounded-xl bg-analytics-primary/10 text-analytics-primary">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
+                        </div>
+                        <span class="flex items-center text-xs font-medium text-green-500 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+                            +12% <i data-lucide="arrow-up-right" class="w-3 h-3 ml-1"></i>
+                        </span>
+                    </div>
+                    <div class="mb-1">
+                        <span class="text-3xl font-heading font-semibold text-gray-900 dark:text-white counter" data-target="64">0</span><span class="text-xl text-gray-900 dark:text-white">%</span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium">Low Nutrition Confidence</p>
+                    <div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full mt-4 overflow-hidden">
+                        <div class="bg-gradient-to-r from-analytics-primary to-analytics-secondary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" id="bar-confidence"></div>
+                    </div>
+                </div>
+
+                <!-- KPI Card 2: Meals Per Day -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-1 opacity-0" style="animation-delay: 200ms;">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-2.5 rounded-xl bg-analytics-secondary/10 text-analytics-secondary">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="mb-1">
+                        <span class="text-3xl font-heading font-semibold text-gray-900 dark:text-white counter" data-target="2">0</span><span class="text-xl text-gray-900 dark:text-white">.4</span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium">Avg Meals / Day</p>
+                    <div class="mt-4 flex gap-1">
+                        <div class="h-1.5 w-full bg-analytics-secondary rounded-full opacity-100"></div>
+                        <div class="h-1.5 w-full bg-analytics-secondary rounded-full opacity-100"></div>
+                        <div class="h-1.5 w-full bg-analytics-secondary rounded-full opacity-30"></div>
+                    </div>
+                </div>
+
+                <!-- KPI Card 3: Label Reading -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-1 md:col-span-2 opacity-0" style="animation-delay: 300ms;">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-900/20 text-orange-500">
+                            <i data-lucide="scan-barcode" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xs text-gray-400">Survey result</span>
+                    </div>
+                    <div class="mb-1">
+                        <span class="text-3xl font-heading font-semibold text-gray-900 dark:text-white counter" data-target="72">0</span><span class="text-xl text-gray-900 dark:text-white">%</span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium">Rarely/Never Read Labels</p>
+                    <p class="text-[10px] text-gray-400 mt-2 leading-tight">Majority of students find labels confusing or time-consuming.</p>
+                </div>
+
+                <!-- Main Chart Area (Topics of Interest) -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-3 min-h-[320px] opacity-0" style="animation-delay: 400ms;">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="font-heading font-semibold text-gray-900 dark:text-white text-sm">Topics of Interest</h3>
+                            <p class="text-xs text-gray-400 mt-1">What students want to learn most</p>
+                        </div>
+                        <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <i data-lucide="more-horizontal" class="w-4 h-4 text-gray-400"></i>
+                        </button>
+                    </div>
+                    <div class="relative w-full h-[240px]">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Secondary Chart (Activity Levels Pie) -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-1 opacity-0" style="animation-delay: 500ms;">
+                    <h3 class="font-heading font-semibold text-gray-900 dark:text-white text-sm mb-6">Activity Levels</h3>
+                    <div class="relative w-full aspect-square flex items-center justify-center">
+                        <canvas id="pieChart"></canvas>
+                        <!-- Center Label -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span class="text-2xl font-bold text-gray-900 dark:text-white">42%</span>
+                            <span class="text-[10px] uppercase tracking-wide text-gray-400">Sedentary</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-[#6C63FF]"></span>
+                                <span class="text-gray-500 dark:text-gray-400">Sedentary</span>
+                            </div>
+                            <span class="font-medium text-gray-900 dark:text-white">42%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-[#47C6FF]"></span>
+                                <span class="text-gray-500 dark:text-gray-400">Active</span>
+                            </div>
+                            <span class="font-medium text-gray-900 dark:text-white">35%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-gray-200 dark:bg-gray-600"></span>
+                                <span class="text-gray-500 dark:text-gray-400">Intense</span>
+                            </div>
+                            <span class="font-medium text-gray-900 dark:text-white">23%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Full Width Bar (Nutrient Concerns) -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-[24px] p-6 border border-gray-100 dark:border-gray-700 shadow-sm col-span-1 lg:col-span-4 opacity-0" style="animation-delay: 600ms;">
+                    <h3 class="font-heading font-semibold text-gray-900 dark:text-white text-sm mb-4">Top Nutrient Concerns</h3>
+                    <div class="space-y-4">
+                        <!-- Item 1 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1.5">
+                                <span class="text-gray-700 dark:text-gray-300">Protein Intake</span>
+                                <span class="text-gray-500">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-[#6C63FF] h-full rounded-full w-[85%]"></div>
+                            </div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1.5">
+                                <span class="text-gray-700 dark:text-gray-300">Sugar Reduction</span>
+                                <span class="text-gray-500">72%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-[#6C63FF] h-full rounded-full w-[72%] opacity-80"></div>
+                            </div>
+                        </div>
+                         <!-- Item 3 -->
+                         <div>
+                            <div class="flex justify-between text-xs font-medium mb-1.5">
+                                <span class="text-gray-700 dark:text-gray-300">Vitamin Deficiency</span>
+                                <span class="text-gray-500">64%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-[#6C63FF] h-full rounded-full w-[64%] opacity-60"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -646,20 +840,21 @@
         // Initialize Icons
         lucide.createIcons();
 
-        // Dark Mode Toggle
+        // Dark Mode Logic (Updated to refresh charts)
         const themeToggle = document.getElementById('themeToggle');
         const html = document.documentElement;
         
-        // Check system preference
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             html.classList.add('dark');
         }
 
         themeToggle.addEventListener('click', () => {
             html.classList.toggle('dark');
+            // Slight delay to allow CSS variable updates before chart refresh if needed
+            // Currently using CSS variables so immediate, but handy placeholder
         });
 
-        // Mobile Menu Toggle
+        // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
 
@@ -669,17 +864,12 @@
 
         // Accordion Logic
         const accordions = document.querySelectorAll('.accordion-header');
-
         accordions.forEach(acc => {
             acc.addEventListener('click', function() {
-                // Toggle active class on icon
                 const icon = this.querySelector('svg.lucide-chevron-down');
-                
-                // Toggle Content
                 const content = this.nextElementSibling;
                 const isExpanded = content.classList.contains('active');
                 
-                // Close all others (Linear style)
                 document.querySelectorAll('.accordion-content').forEach(c => {
                     c.style.maxHeight = null;
                     c.classList.remove('active');
@@ -696,13 +886,179 @@
             });
         });
 
-        // Scroll Progress Bar
+        // Scroll Progress
         window.onscroll = function() {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             let scrolled = (winScroll / height) * 100;
             document.getElementById("scrollProgress").style.width = scrolled + "%";
         };
+
+        // --- NEW: Analytics & Charts Logic ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Observer to trigger animations when section is visible
+            const analyticsSection = document.getElementById('analytics-dashboard');
+            const header = document.getElementById('analytics-header');
+            const cards = document.querySelectorAll('.dashboard-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate Header
+                        header.classList.add('animate-fade-in-up');
+                        
+                        // Animate Cards Staggered
+                        cards.forEach(card => {
+                            card.classList.add('animate-fade-in-up');
+                        });
+                        
+                        // Start Counters
+                        startCounters();
+                        
+                        // Load Charts
+                        loadCharts();
+
+                        // Fill bars
+                        setTimeout(() => {
+                            document.getElementById('bar-confidence').style.width = '64%';
+                        }, 500);
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            observer.observe(analyticsSection);
+        });
+
+        function startCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000; // ms
+                const increment = target / (duration / 16);
+                
+                let current = 0;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        function loadCharts() {
+            // --- 1. Main Chart (Bar - Topics of Interest) ---
+            const ctxMain = document.getElementById('mainChart').getContext('2d');
+            
+            // Create Gradient
+            const gradientMain = ctxMain.createLinearGradient(0, 0, 0, 400);
+            gradientMain.addColorStop(0, '#6C63FF');
+            gradientMain.addColorStop(1, '#47C6FF');
+
+            new Chart(ctxMain, {
+                type: 'bar',
+                data: {
+                    labels: ['Weight Loss', 'Muscle Gain', 'Energy', 'Recipes', 'Exam Prep'],
+                    datasets: [{
+                        label: '% Interest',
+                        data: [65, 59, 80, 81, 92],
+                        backgroundColor: gradientMain,
+                        borderRadius: 6,
+                        barThickness: 30,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#111827',
+                            padding: 12,
+                            cornerRadius: 8,
+                            titleFont: { family: 'Inter', size: 13 },
+                            bodyFont: { family: 'Inter', size: 13 },
+                            displayColors: false,
+                            callbacks: {
+                                label: (context) => context.parsed.y + '%'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.1)',
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                font: { family: 'Inter', size: 10 },
+                                color: '#9CA3AF'
+                            },
+                            border: { display: false }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: 'Inter', size: 11 },
+                                color: '#6B7280'
+                            },
+                            border: { display: false }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+
+            // --- 2. Secondary Chart (Doughnut - Activity) ---
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sedentary', 'Lightly Active', 'Moderate', 'Intense'],
+                    datasets: [{
+                        data: [42, 35, 15, 8],
+                        backgroundColor: [
+                            '#6C63FF', // Primary
+                            '#47C6FF', // Secondary
+                            '#E5E7EB', // Grey
+                            '#F3F4F6'  // Light Grey
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#111827',
+                            callbacks: {
+                                label: (context) => ' ' + context.label + ': ' + context.parsed + '%'
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1500
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
